@@ -1,0 +1,128 @@
+{% extends "admin/admin.html" %}
+{% import "admin/alert_info.html" as alert_info %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for("static",filename="jwplayer/skins/stormtrooper.css") }}">
+{% endblock head %}
+
+{% block content %}
+    <section class="content-header">
+        <h1>微电影管理系统</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 电影管理</a></li>
+            <li class="active">添加电影</li>
+        </ol>
+    </section>
+    <section class="content" id="showcontent">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{{ title }}</h3>
+                    </div>
+                    <form role="form" method="post" enctype="multipart/form-data">
+                        {{ alert_info.succeed() }}
+                        {{ alert_info.fail() }}
+                        <div class="box-body">
+                            <div class="form-group">
+                                {{ form.title.label }}
+                                {{ form.title }}
+                                {{ alert_info.error(form.title) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.url.label }}
+                                {{ form.url }}
+                                {{ alert_info.error(form.url) }}
+                                <div style="margin-top:5px;">
+                                    <div id="moviecontainer"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.info.label }}
+                                {{ form.info }}
+                                {{ alert_info.error(form.info) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.logo.label }}
+                                {{ form.logo }}
+                                {{ alert_info.error(form.logo) }}
+                                {% if movie %}
+                                    <img src="{{ url_for("static",filename="upload/"+movie.logo) }}"
+                                         style="margin-top:5px;max-width: 300px;max-height: 300px"
+                                         class="img-responsive" alt="">
+                                {% else %}
+                                    <img data-src="holder.js/262x166" style="margin-top:5px;" class="img-responsive"
+                                         alt="">
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.star_level.label }}
+                                {{ form.star_level }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.tag_id.label }}
+                                {{ form.tag_id }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.area.label }}
+                                {{ form.area }}
+                                {{ alert_info.error(form.area) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.length.label }}
+                                {{ form.length }}
+                                {{ alert_info.error(form.length) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.release_time.label }}
+                                {{ form.release_time }}
+                                {{ alert_info.error(form.release_time) }}
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            {{ form.submit(value=btn) }}
+                            {{ form.csrf_token }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+
+{% block script %}
+    <script src="{{ url_for("static",filename="jwplayer/jwplayer.js") }}"></script>
+    <script>
+        jwplayer.key = "P9VTqT/X6TSP4gi/hy1wy23BivBhjdzVjMeOaQ==";
+        jwplayer("moviecontainer").setup({
+            flashplayer: "{{ url_for("static",filename="jwplayer/jwplayer.flash.swf") }}",
+            playlist: [{
+                {% if movie %}
+                    file: "{{ url_for("static",filename="upload/"+movie.url) }}",
+                    title: "{{ movie.title }}"
+                {% endif %}
+            }],
+            modes: [{
+                type: "html5"
+            }, {
+                type: "flash",
+                src: "{{ url_for("static",filename="jwplayer/jwplayer.flash.swf") }}"
+            }, {
+                type: "download"
+            }],
+            skin: {
+                name: "vapor"
+            },
+            "playlist.position": "left",
+            "playlist.size": 200,
+            height: 250,
+            width: 387
+        });
+
+        $('#input_release_time').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN'
+        });
+    </script>
+{% endblock script %}

@@ -1,0 +1,53 @@
+{% extends "admin/admin.html" %}
+{% import "admin/alert_info.html" as alert_info %}
+
+{% block content %}
+    <section class="content-header">
+        <h1>微电影管理系统</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 管理员管理</a></li>
+            <li class="active">添加管理员</li>
+        </ol>
+    </section>
+    <section class="content" id="showcontent">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">添加管理员</h3>
+                    </div>
+                    {{ alert_info.succeed() }}
+                    {{ alert_info.fail() }}
+                    <form role="form" method="post">
+                        <div class="box-body">
+                            <div class="form-group">
+                                {{ form.name.label }}
+                                {{ form.name }}
+                                {{ alert_info.error(form.name) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.password.label }}
+                                {{ form.password }}
+                                {{ alert_info.error(form.password) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.repeat_password.label }}
+                                {{ form.repeat_password }}
+                                {{ alert_info.error(form.repeat_password) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.role_id.label }}
+                                {{ form.role_id }}
+                                {{ alert_info.error(form.role_id) }}
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            {{ form.submit }}
+                            {{ form.csrf_token }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

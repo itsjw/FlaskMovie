@@ -1,0 +1,47 @@
+{% extends "home/menu.html" %}
+{% import "home/pagination.html" as pg %}
+
+{% block right %}
+    <div class="col-md-9">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;收藏电影</h3>
+            </div>
+
+            <div class="panel-body">
+                <div class="col-md-12">
+                    {% for collect in pagination.items %}
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="play.html">
+                                    {% if collect.movie.logo %}
+                                        <img class="media-object"
+                                             src="{{ url_for("static",filename="upload/"+collect.movie.logo) }}" alt=""
+                                             style="width: 131px;height: 83px;">
+                                    {% else %}
+                                        <img class="media-object" src="holder.js/131x83" alt="">
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">{{ collect.movie.title }}
+                                    <a href="{{ url_for("home.play",movie_id=collect.movie_id) }}"
+                                       class="label label-primary pull-right">
+                                        <span class="glyphicon glyphicon-play"></span>播放影片
+                                    </a>
+                                </h4>
+                                {{ collect.movie.info }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-12 text-center" style="margin-top:6px;">
+                    <nav aria-label="Page navigation">
+                        {{ pg.generate_pagination(pagination,"home.movie_collect") }}
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock right %}

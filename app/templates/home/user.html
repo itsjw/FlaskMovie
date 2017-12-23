@@ -1,0 +1,59 @@
+{% extends "home/menu.html" %}
+{% import "home/alert_info.html" as alert_info %}
+
+{% block right %}
+    <div class="col-md-9">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;会员中心</h3>
+            </div>
+            <div class="panel-body">
+                {{ alert_info.succeed() }}
+                {{ alert_info.fail() }}
+                <form role="form" method="post" enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="form-group">
+                            <span class="glyphicon glyphicon-user"></span>&nbsp;
+                            <label for="name">昵称：</label>
+                            <input class="form-control" disabled="disabled" id="name" name="name" placeholder="请输入昵称！"
+                                   required="required" type="text" value="{{ user.name }}">
+                        </div>
+                        <div class="form-group">
+                            <span class="glyphicon glyphicon-envelope"></span>&nbsp;
+                            {{ form.email.label }}
+                            {{ form.email }}
+                            {{ alert_info.error(form.email) }}
+                        </div>
+                        <div class="form-group">
+                            <span class="glyphicon glyphicon-phone"></span>&nbsp;
+                            {{ form.phone.label }}
+                            {{ form.phone }}
+                            {{ alert_info.error(form.phone) }}
+                        </div>
+                        <div class="form-group">
+                            <span class="glyphicon glyphicon-picture"></span>&nbsp;
+                            {{ form.photo.label }}
+                            {% if user.photo %}
+                                <img src="{{ url_for("static",filename="upload/"+user.photo) }}"
+                                     class="img-responsive img-rounded" style="height: 400px">
+                            {% else %}
+                                <img src="holder.js/100x100" class="img-responsive img-rounded">
+                            {% endif %}
+                            <span class="glyphicon glyphicon-open"></span>
+                            {{ form.photo }}
+                            <input id="input_face" class="form-control" name="face" type="hidden" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <span class="glyphicon glyphicon-edit"></span>&nbsp;
+                            {{ form.info.label }}
+                            {{ form.info }}
+                        </div>
+                        <span class="glyphicon glyphicon-saved"></span>
+                        {{ form.submit }}
+                        {{ form.csrf_token }}
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock right %}

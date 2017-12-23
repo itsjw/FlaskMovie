@@ -1,0 +1,173 @@
+{% extends "home/home.html" %}
+{% import "home/pagination.html" as pg %}
+
+{% block content %}
+    <!--热门电影-->
+    <section id="hotmovie">
+        <div class="container" style="margin-top:76px">
+            <div class="row wow fadeInRight" data-wow-delay="0.6s">
+                <div class="row">
+                    <iframe class="wow fadeIn" width="100%" height="375px" frameborder=0 scrolling=no
+                            src="{{ url_for("home.animation") }}"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--热门电影-->
+    <!--电影列表-->
+    <section id="movielist">
+        <div class="container">
+            <div class="row wow fadeIn" data-wow-delay="0.6s">
+                <div class="col-md-12 table-responsive">
+                    <table class="table text-left table-bordered" id="movietags">
+                        <tr>
+                            <td style="width:10%;">电影标签</td>
+                            <td style="width:90%;">
+                                <a href="{{ url_for("home.index",tag="0",star_level=args.star_level,release_time=args.release_time,play_num=args.play_num,comment_num=args.comment_num) }}"
+                                   class="label label-info">
+                                    <span class="glyphicon glyphicon-tag"></span>&nbsp;全部
+                                </a>&nbsp;
+                                {% for tag in tags %}
+                                    <a href="{{ url_for("home.index",tag=tag.id,star_level=args.star_level,release_time=args.release_time,play_num=args.play_num,comment_num=args.comment_num) }}"
+                                       class="label label-info">
+                                        <span class="glyphicon glyphicon-tag"></span>&nbsp;{{ tag.name }}
+                                    </a>&nbsp;
+                                {% endfor %}
+                        </tr>
+                        <tr>
+                            <td>电影星级</td>
+                            <td>
+                                <a href="{{ url_for("home.index",tag=args.tag,star_level=i,release_time=args.release_time,play_num=args.play_num,comment_num=args.comment_num) }}"
+                                   class="label label-warning">
+                                    <span class="glyphicon glyphicon-star"></span>&nbsp;全部
+                                </a>&nbsp;
+                                {% for i in range(1,6) %}
+                                    <a href="{{ url_for("home.index",tag=args.tag,star_level=i,release_time=args.release_time,play_num=args.play_num,comment_num=args.comment_num) }}"
+                                       class="label label-warning">
+                                        <span class="glyphicon glyphicon-star"></span>&nbsp;{{ i }}星
+                                    </a>&nbsp;
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>上映时间</td>
+                            <td>
+                                <a href="{{ url_for("home.index",tag=args.tag,star_level=args.star_level,play_num=args.play_num,comment_num=args.comment_num) }}"
+                                   class="label label-default">
+                                    <span class="glyphicon glyphicon-time"></span>&nbsp;全部
+                                </a>&nbsp;
+                                {% for year in years %}
+                                    <a href="{{ url_for("home.index",tag=args.tag,star_level=args.star_level,release_time=year,play_num=args.play_num,comment_num=args.comment_num) }}"
+                                       class="label label-default">
+                                        <span class="glyphicon glyphicon-time"></span>&nbsp;{{ year }}
+                                    </a>&nbsp;
+                                {% endfor %}
+                                <a href="{{ url_for("home.index",tag=args.tag,star_level=args.star_level,release_time=1,play_num=args.play_num,comment_num=args.comment_num) }}"
+                                   class="label label-default">
+                                    <span class="glyphicon glyphicon-time"></span>&nbsp;最早
+                                </a></td>
+                        </tr>
+                        <tr>
+                            <td>播放数量</td>
+                            <td>
+                                <a href="{{ url_for("home.index",tag=args.tag,star_level=args.star_level,release_time=args.release_time,play_num=1,comment_num=0) }}"
+                                   class="label label-success">
+                                    <span class="glyphicon glyphicon-arrow-down"></span>&nbsp;从高到底
+                                </a>&nbsp;
+                                <a href="{{ url_for("home.index",tag=args.tag,star_level=args.star_level,release_time=args.release_time,play_num=-1,comment_num=0) }}"
+                                   class="label label-danger">
+                                    <span class="glyphicon glyphicon-arrow-up"></span>&nbsp;从低到高
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>评论数量</td>
+                            <td>
+                                <a href="{{ url_for("home.index",tag=args.tag,star_level=args.star_level,release_time=args.release_time,play_num=0,comment_num=1) }}"
+                                   class="label label-success">
+                                    <span class="glyphicon glyphicon-arrow-down"></span>&nbsp;从高到底
+                                </a>&nbsp;
+                                <a href="{{ url_for("home.index",tag=args.tag,star_level=args.star_level,release_time=args.release_time,play_num=0,comment_num=-1) }}"
+                                   class="label label-danger">
+                                    <span class="glyphicon glyphicon-arrow-up"></span>&nbsp;从低到高
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                {% for movie in pagination.items %}
+                    <div class="col-md-3">
+                        <div class="movielist text-center">
+                            {% if movie.logo %}
+                                <img src="{{ url_for("static",filename="upload/"+movie.logo) }}"
+                                     class="img-responsive center-block" alt="" style="width: 262px;height: 166px;">
+                            {% else %}
+                                <img src="holder.js/262x166" class="img-responsive center-block" alt="">
+                            {% endif %}
+                            <div class="text-left" style="margin-left:auto;margin-right:auto;width:210px;">
+                                <span style="color:#999;font-style: italic;">{{ movie.title }}</span><br>
+                                <div>
+                                    {% for star in range(5) %}
+                                        {% if loop.index < movie.star_level %}
+                                            <span class="glyphicon glyphicon-star" style="color:#FFD119"></span>
+                                        {% else %}
+                                            <span class="glyphicon glyphicon-star-empty" style="color:#FFD119"></span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <a href="{{ url_for("home.play",movie_id=movie.id) }}" class="btn btn-primary"
+                               target="_blank" role="button">
+                                <span class="glyphicon glyphicon-play"></span>&nbsp;播放
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="col-md-12">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            {% if pagination.has_prev %}
+                                <li>
+                                    <a href="{{ url_for("home.index",tag=args.tag,star_level=args.star_level,play_num=args.play_num,comment_num=args.comment_num,release_time=args.release_time) }}"
+                                       aria-label="First"><span
+                                            aria-hidden="true">首页</span></a></li>
+                                <li>
+                                    <a href="{{ url_for("home.index",page=pagination.prev_num,tag=args.tag,star_level=args.star_level,play_num=args.play_num,comment_num=args.comment_num,release_time=args.release_time) }}"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">上一页</span>
+                                    </a></li>
+                            {% else %}
+                                <li><a href="javascript:" aria-label="First" style="cursor: no-drop"><span
+                                        aria-hidden="true">首页</span></a>
+                                </li>
+                                <li><a href="javascript:" aria-label="Previous" style="cursor: no-drop">
+                                    <span aria-hidden="true">上一页</span></a></li>
+                            {% endif %}
+
+                            <li><a href="javascript:">{{ pagination.page }}&nbsp;/&nbsp;{{ pagination.pages }}</a></li>
+
+                            {% if pagination.has_next %}
+                                <li>
+                                    <a href="{{ url_for("home.index",page=pagination.next_num,tag=args.tag,star_level=args.star_level,play_num=args.play_num,comment_num=args.comment_num,release_time=args.release_time) }}"
+                                       aria-label="Next">
+                                        <span aria-hidden="true">下一页</span></a></li>
+                                <li>
+                                    <a href="{{ url_for("home.index",page=pagination.pages,tag=args.tag,star_level=args.star_level,play_num=args.play_num,comment_num=args.comment_num,release_time=args.release_time) }}"
+                                       aria-label="Last">
+                                        <span aria-hidden="true">尾页</span></a></li>
+                            {% else %}
+                                <li><a href="javascript:" aria-label="Next" style="cursor: no-drop">
+                                    <span aria-hidden="true">下一页</span></a></li>
+                                <li><a href="javascript:" aria-label="Last" style="cursor: no-drop">
+                                    <span aria-hidden="true">尾页</span></a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--电影列表-->
+{% endblock content %}

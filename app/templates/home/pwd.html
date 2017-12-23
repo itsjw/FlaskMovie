@@ -1,0 +1,34 @@
+{% extends "home/menu.html" %}
+{% import "home/alert_info.html" as alert_info %}
+
+{% block right %}
+    <div class="col-md-9">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;会员中心</h3>
+            </div>
+            {{ alert_info.succeed() }}
+            {{ alert_info.fail() }}
+            <div class="panel-body">
+                <form role="form" method="post">
+                    <fieldset>
+                        <div class="form-group">
+                            <span class="glyphicon glyphicon-lock"></span>&nbsp;
+                            {{ form.old_password.label }}
+                            {{ form.old_password }}
+                            {{ alert_info.error(form.old_password) }}
+                        </div>
+                        <div class="form-group">
+                            <span class="glyphicon glyphicon-lock"></span>&nbsp;
+                            {{ form.new_password.label }}
+                            {{ form.new_password }}
+                            {{ alert_info.error(form.new_password) }}
+                        </div>
+                        {{ form.submit }}
+                        {{ form.csrf_token }}
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock right %}
